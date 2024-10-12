@@ -1,6 +1,10 @@
 # Configurando a aplicação com o Prometheus e Grafana
 
-Essa configuração se baseia na premissa de que você está utilizando uma máquina windows e já possui o WSL instalado e configurado, juntamente ao Docker.
+Essa configuração se baseia nas seguintes premissas:
+- Você está utilizando uma máquina windows
+- Possui o WSL instalado e configurado
+- Possui o Docker instalado e configurado
+- Possui uma conta no Grafana (incluso conta free-cloud)
 
 Siga os passos abaixo no seu WSL.
 
@@ -57,10 +61,38 @@ Quando sua aplicação subir, você pode validar que o Prometheus consegue obter
 
 ![image](https://github.com/user-attachments/assets/8b6c4e01-b4df-432a-ac44-7eda738117cf)
 
+## Configurar Grafana & Prometheus
 
-# Adendos
+1. Acesse sua conta Grafana
+2. Acesse `Connections`
+3. `Private data source connect`
+4. `Add new network`
+5. Defina um nome
+6. Selecione a configuração de sua preferência, neste caso, `Docker`
+7. Gere um novo token
+8. Execute a imagem do Docker gerada com seu token
+9. Teste a conexão do agente
 
-## Problema do container não enxergar sua aplicação
+![image](https://github.com/user-attachments/assets/bfdf0098-6c16-4f64-8191-36f4f3441510)
+
+10. Clique em `create a new data source`
+11. Selecione `Prometheus`
+12. Em `Connection`, defina: `http://id-container:9090`
+13. Em `HTTP Method` selecione `GET`
+14. Em `Private data source connect` selecione sua conexão
+
+![image](https://github.com/user-attachments/assets/67f8bb50-d2ac-4d7c-8e7f-07e4c6aa5ff0)
+
+15. Clique em `Save & Test`
+
+Com estes passos, é possível visualizar as métricas da aplicação em `Explore`:
+
+![image](https://github.com/user-attachments/assets/f8003b58-0f9c-442e-a122-af4cd0a99a58)
+
+
+# Problemas conhecidos
+
+## Container do Prometheus não consegue enxergar sua aplicação
 
 Ao executar a aplicação em .net na máquina windows e o prometheus estar em um container no docker, foi necessário adicionar as linhas de código abaixo:
 
