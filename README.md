@@ -1,3 +1,16 @@
+- [Configurando a aplicação com Prometheus e Grafana](#configurando-a-aplicação-com-prometheus-e-grafana)
+  - [Configurar Grafana](#configurar-grafana)
+    - [Altere o arquivo docker-compose](#altere-o-arquivo-docker-compose)
+  - [Configurar Prometheus](#configurar-prometheus)
+    - [Altere o arquivo prometheus.yml](#altere-o-arquivo-prometheusyml)
+  - [Execute o docker-compose](#execute-o-docker-compose)
+  - [Acesso ao Prometheus](#acesso-ao-prometheus)
+    - [Targets](#targets)
+  - [Configurar Grafana \& Prometheus](#configurar-grafana--prometheus)
+- [Problemas conhecidos](#problemas-conhecidos)
+  - [Container do Prometheus não consegue enxergar sua aplicação](#container-do-prometheus-não-consegue-enxergar-sua-aplicação)
+
+
 # Configurando a aplicação com Prometheus e Grafana
 
 Essa configuração se baseia nas seguintes premissas:
@@ -6,46 +19,38 @@ Essa configuração se baseia nas seguintes premissas:
 - Possui o Docker instalado e configurado
 - Possui uma conta no Grafana (incluso conta free-cloud)
 
-Siga os passos abaixo no seu WSL.
+## Configurar Grafana
 
-## Criar uma network no Docker
+1. Acesse sua conta Grafana
+2. Acesse `Connections`
+3. `Private data source connect`
+4. `Add new network`
+5. Defina um nome
+6. Selecione a configuração de sua preferência, neste caso, `Docker`
+7. Gere um novo token
+8. O Grafana vai gerar um comando para você subir uma imagem no docker, salve este comando para realizar as substituições abaixo
 
-Crie uma rede no docker para que os containers compartilhem da mesma.
+### Altere o arquivo docker-compose
 
-`docker network create monitoring`
+Altere o arquivo `docker-compose.yml` realizando as substituições abaixo:
 
-## Configurar o Prometheus
+1. Substitua `<SEU-TOKEN>` pelo token gerado na interface do Grafana
+2. Substituia `<SEU-CLUSTER>` pelo cluster utilizado no Grafana
+3. Substitua `<SEU-ID>` pelo seu ID no Grafana
 
-### Criar e navegar a um diretório
+## Configurar Prometheus
 
-`mkdir ~/prometheus`
+### Altere o arquivo prometheus.yml
 
-`cd ~/prometheus`
+Substitua `111.111.1.11` pelo seu IP e `5000` pela porta da sua aplicação.
 
-### Crie o arquivo prometheus.yml
+Foi necessário colocar o meu `IPV4`, obtido através do comando `ipconfig`.
 
-``` yaml
-global:
-  scrape_interval: 15s
+## Execute o docker-compose
 
-scrape_configs:
-  - job_name: 'dotnet_app'
-    metrics_path: '/metrics'
-    static_configs:
-      - targets: ['111.111.1.11:5000']  # Substitua pelo seu IP e porta da aplicação
-```
+Vá até a pasta `docker` do repositório e execute o comando abaixo para subir os containers do agente do Grafana e do Prometheus:
 
-Foi necessário colocar o meu IPV4, obtido através do comando `ipconfig`.
-
-### Executar container do Prometheus
-
-``` bash
-docker run -d --name prometheus \
-  --network monitoring \
-  -p 9090:9090 \
-  -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
-  prom/prometheus
-```
+`docker-compose up -d`
 
 ## Acesso ao Prometheus
 
@@ -57,38 +62,25 @@ Você pode acessar a GUI do Prometheus no endereço e porta configurados, neste 
 
 Quando sua aplicação subir, você pode validar que o Prometheus consegue obter suas métricas acessando:
 
-`http://localhost:9090/targets?search=`
+`http://localhost:9090/targets`
 
 ![image](https://github.com/user-attachments/assets/8b6c4e01-b4df-432a-ac44-7eda738117cf)
 
 ## Configurar Grafana & Prometheus
 
-1. Acesse sua conta Grafana
-2. Acesse `Connections`
-3. `Private data source connect`
-4. `Add new network`
-5. Defina um nome
-6. Selecione a configuração de sua preferência, neste caso, `Docker`
-7. Gere um novo token
-8. Execute a imagem do Docker gerada com seu token, com a network criada no início `--network monitoring`. Será semelhante à:
-
-``` bash
-docker run -d --name pdc-agent --network monitoring grafana/pdc-agent:latest -token <SEU-TOKEN> -cluster prod-us-east-0
-```
-
-10. Teste a conexão do agente
+1. Teste a conexão do agente no Grafana
 
 ![image](https://github.com/user-attachments/assets/bfdf0098-6c16-4f64-8191-36f4f3441510)
 
-10. Clique em `create a new data source`
-11. Selecione `Prometheus`
-12. Em `Connection`, defina: `http://<id-container>:9090`, substituindo `<id-container>` com o id do seu container do Prometheus
-13. Em `HTTP Method` selecione `GET`
-14. Em `Private data source connect` selecione sua conexão
+2. Clique em `create a new data source`
+3. Selecione `Prometheus`
+4. Em `Connection`, defina: `http://<nome-container>:9090`, substituindo `<nome-container>` com o nome do seu container do Prometheus
+5. Em `HTTP Method` selecione `GET`
+6. Em `Private data source connect` selecione sua conexão
 
 ![image](https://github.com/user-attachments/assets/67f8bb50-d2ac-4d7c-8e7f-07e4c6aa5ff0)
 
-15. Clique em `Save & Test`
+7. Clique em `Save & Test`
 
 Com estes passos, é possível visualizar as métricas da aplicação em `Explore`:
 
