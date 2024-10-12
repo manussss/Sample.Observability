@@ -70,14 +70,19 @@ Quando sua aplicação subir, você pode validar que o Prometheus consegue obter
 5. Defina um nome
 6. Selecione a configuração de sua preferência, neste caso, `Docker`
 7. Gere um novo token
-8. Execute a imagem do Docker gerada com seu token, com a network criada no início `--network monitoring`
-9. Teste a conexão do agente
+8. Execute a imagem do Docker gerada com seu token, com a network criada no início `--network monitoring`. Será semelhante à:
+
+``` bash
+docker run -d --name pdc-agent --network monitoring grafana/pdc-agent:latest -token <SEU-TOKEN> -cluster prod-us-east-0
+```
+
+10. Teste a conexão do agente
 
 ![image](https://github.com/user-attachments/assets/bfdf0098-6c16-4f64-8191-36f4f3441510)
 
 10. Clique em `create a new data source`
 11. Selecione `Prometheus`
-12. Em `Connection`, defina: `http://id-container:9090`, substituindo `id-container` com o id do seu container do Prometheus
+12. Em `Connection`, defina: `http://<id-container>:9090`, substituindo `<id-container>` com o id do seu container do Prometheus
 13. Em `HTTP Method` selecione `GET`
 14. Em `Private data source connect` selecione sua conexão
 
