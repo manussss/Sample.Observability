@@ -1,0 +1,30 @@
+version: '3.8'
+
+networks:
+  monitoring:
+    driver: bridge
+
+services:
+  prometheus:
+    build: .
+    container_name: prometheus
+    networks:
+      - monitoring
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/etc/prometheus
+  
+  pdc-agent:
+    image: grafana/pdc-agent:latest
+    container_name: pdc-agent
+    networks:
+      - monitoring
+    command: >
+      -token <SEU-TOKEN>
+      -cluster <SEU-CLUSTER>
+      -gcloud-hosted-grafana-id <SEU-ID>
+    restart: unless-stopped
+
+volumes:
+  prometheus_data:
