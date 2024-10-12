@@ -22,6 +22,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseRouting();
 
-app.MapMetrics();
+app.MapMetrics(); // Adiciona o endpoint /metrics do Prometheus
 
 app.Run();
