@@ -77,7 +77,7 @@ Quando sua aplicação subir, você pode validar que o Prometheus consegue obter
 
 10. Clique em `create a new data source`
 11. Selecione `Prometheus`
-12. Em `Connection`, defina: `http://id-container:9090`
+12. Em `Connection`, defina: `http://id-container:9090`, substituindo `id-container` com o id do seu container do Prometheus
 13. Em `HTTP Method` selecione `GET`
 14. Em `Private data source connect` selecione sua conexão
 
