@@ -70,7 +70,7 @@ Quando sua aplicação subir, você pode validar que o Prometheus consegue obter
 5. Defina um nome
 6. Selecione a configuração de sua preferência, neste caso, `Docker`
 7. Gere um novo token
-8. Execute a imagem do Docker gerada com seu token
+8. Execute a imagem do Docker gerada com seu token, com a network criada no início `--network monitoring`
 9. Teste a conexão do agente
 
 ![image](https://github.com/user-attachments/assets/bfdf0098-6c16-4f64-8191-36f4f3441510)
