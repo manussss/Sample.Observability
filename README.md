@@ -1,4 +1,4 @@
-# Configurando a aplicação com o Prometheus e Grafana
+# Configurando a aplicação com Prometheus e Grafana
 
 Essa configuração se baseia nas seguintes premissas:
 - Você está utilizando uma máquina windows
