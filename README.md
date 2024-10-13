@@ -98,7 +98,7 @@ Com estes passos, é possível visualizar as métricas da aplicação em `Explor
 
 Agora é possível visualizar os logs e obter insights sobre suas aplicações:
 
-TODO add asset
+![image](https://github.com/user-attachments/assets/444da663-84c3-43d2-8d9a-e257d27abfaf)
 
 # Problemas conhecidos
 
