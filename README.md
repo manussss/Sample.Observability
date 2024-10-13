@@ -1,4 +1,4 @@
-- [Configurando a aplicação com Prometheus e Grafana](#configurando-a-aplicação-com-prometheus-e-grafana)
+- [Configurando a aplicação com Prometheus, Grafana \& Loki](#configurando-a-aplicação-com-prometheus-grafana--loki)
   - [Configurar Grafana](#configurar-grafana)
     - [Altere o arquivo docker-compose](#altere-o-arquivo-docker-compose)
   - [Configurar Prometheus](#configurar-prometheus)
@@ -7,11 +7,12 @@
   - [Acesso ao Prometheus](#acesso-ao-prometheus)
     - [Targets](#targets)
   - [Configurar Grafana \& Prometheus](#configurar-grafana--prometheus)
+  - [Configurar Grafana \& Loki](#configurar-grafana--loki)
 - [Problemas conhecidos](#problemas-conhecidos)
   - [Container do Prometheus não consegue enxergar sua aplicação](#container-do-prometheus-não-consegue-enxergar-sua-aplicação)
 
 
-# Configurando a aplicação com Prometheus e Grafana
+# Configurando a aplicação com Prometheus, Grafana & Loki
 
 Essa configuração se baseia nas seguintes premissas:
 - Você está utilizando uma máquina windows
@@ -48,7 +49,7 @@ Foi necessário colocar o meu `IPV4`, obtido através do comando `ipconfig`.
 
 ## Execute o docker-compose
 
-Vá até a pasta `docker` do repositório e execute o comando abaixo para subir os containers do agente do Grafana e do Prometheus:
+Vá até a pasta `docker` do repositório e execute o comando abaixo para subir os containers do Prometheus, Loki e agente do Grafana:
 
 `docker-compose up -d`
 
@@ -86,6 +87,18 @@ Com estes passos, é possível visualizar as métricas da aplicação em `Explor
 
 ![image](https://github.com/user-attachments/assets/f8003b58-0f9c-442e-a122-af4cd0a99a58)
 
+## Configurar Grafana & Loki
+
+1. Clique em `create a new data source`
+2. Selecione `Loki`
+3. Em `Connection`, defina: `http://<nome-container>:3100`, substituindo `<nome-container>` com o nome do seu container do Loki
+4. Em `Private data source connect` selecione sua conexão
+5. Clique em `Save & Test`
+6. Acesse `Explore` e clique no `Loki` criado
+
+Agora é possível visualizar os logs e obter insights sobre suas aplicações:
+
+TODO add asset
 
 # Problemas conhecidos
 

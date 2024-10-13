@@ -26,5 +26,17 @@ services:
       -gcloud-hosted-grafana-id <SEU-ID>
     restart: unless-stopped
 
+  loki:
+    build: .
+    image: grafana/loki:latest
+    container_name: loki
+    networks:
+      - monitoring
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yml:/etc/loki/loki-config.yml
+    command: -config.file=/etc/loki/loki-config.yml
+
 volumes:
   prometheus_data:
